@@ -1,10 +1,21 @@
-#lang racket
+#lang racket/base
+
+;; FFI binding to taglibc
 
 (require ffi/unsafe
-	 ffi/unsafe/define)
+	 ffi/unsafe/define
+         (rename-in racket/contract [-> ->/c]))
+
+;; Racket representation of tag
+(struct tag
+  (title artist album comment genre year track
+   length bitrate samplerate channels)
+  #:transparent)
+
+(provide/contract
+  [get-tags (->/c path-string? (or/c tag? #f))])
 
 (provide (struct-out tag)
-         get-tags
 
          taglib_set_strings_unicode
          taglib_set_string_management_enabled
@@ -47,7 +58,7 @@
 (define taglib (ffi-lib "libtag_c"))
 (define-ffi-definer define-tl taglib)
 
-(define _TagLib_File (_cpointer 'TagLib_File))
+(define _TagLib_File (_cpointer/null 'TagLib_File))
 (define _TagLib_Tag  (_cpointer 'TagLib_Tag))
 (define _TagLib_AudioProperties (_cpointer 'TagLib_AudioProperties))
 
@@ -57,11 +68,6 @@
 	   mp4 asf type)))
 
 ;; Racket API
-
-(struct tag
-  (title artist album comment genre year track
-   length bitrate samplerate channels)
-  #:transparent)
 
 ;; path-string? -> #f or tag
 ;; get tag structure for the given file
@@ -73,6 +79,7 @@
    void
    (lambda ()
      (and file
+          (taglib_file_is_valid file)
           (let* ([ctag (taglib_file_tag file)]
                  [ap (taglib_file_audioproperties file)]
                  [tag-for-file
