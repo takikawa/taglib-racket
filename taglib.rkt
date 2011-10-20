@@ -4,18 +4,33 @@
 
 (require ffi/unsafe
 	 ffi/unsafe/define
+         (only-in unstable/contract option/c)
          (rename-in racket/contract [-> ->/c]))
 
-;; Racket representation of tag
-(struct tag
-  (title artist album comment genre year track
-   length bitrate samplerate channels)
+;; Racket representation of tags and audio
+(struct tag (title artist album comment genre year track)
   #:transparent)
 
+(struct audio-properties (length bitrate samplerate channels)
+  #:transparent)
+
+(define tag/c
+  (struct/c tag
+            string? string? string? string?
+            string? number? number?))
+
+(define audio-properties/c
+  (struct/c audio-properties
+            number? number? number? number?))
+
 (provide/contract
-  [get-tags (->/c path-string? (or/c tag? #f))])
+  ;; get tag and audio props for the given file
+  [get-tags
+    (->/c path-string?
+          (option/c (list/c tag/c audio-properties/c)))])
 
 (provide (struct-out tag)
+         (struct-out audio-properties)
 
          taglib_set_strings_unicode
          taglib_set_string_management_enabled
@@ -69,8 +84,6 @@
 
 ;; Racket API
 
-;; path-string? -> #f or tag
-;; get tag structure for the given file
 (define (get-tags path)
   (unless (path-string? path)
     (raise-type-error 'get-tags "path-string" path))
@@ -82,7 +95,7 @@
           (taglib_file_is_valid file)
           (let* ([ctag (taglib_file_tag file)]
                  [ap (taglib_file_audioproperties file)]
-                 [tag-for-file
+                 [the-tag
                   (tag
                    (taglib_tag_title ctag)
                    (taglib_tag_artist ctag)
@@ -90,14 +103,16 @@
                    (taglib_tag_comment ctag)
                    (taglib_tag_genre ctag)
                    (taglib_tag_year ctag)
-                   (taglib_tag_track ctag)
+                   (taglib_tag_track ctag))]
+                 [audio-props
+                  (audio-properties
                    (taglib_audioproperties_length ap)
                    (taglib_audioproperties_bitrate ap)
                    (taglib_audioproperties_samplerate ap)
                    (taglib_audioproperties_channels ap))])
             (begin
              (taglib_tag_free_strings ctag)
-             tag-for-file))))
+             (list the-tag audio-props)))))
    (lambda ()
      (taglib_file_free file))))
 
