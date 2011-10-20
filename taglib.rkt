@@ -7,6 +7,54 @@
          (only-in unstable/contract option/c)
          (rename-in racket/contract [-> ->/c]))
 
+(provide (struct-out tag)
+         (struct-out audio-properties)
+
+         (contract-out
+           ;; get tag and audio props for the given file
+           [get-tags
+             (->/c path-string?
+                   (option/c (list/c tag/c audio-properties/c)))])
+
+         ;; Low-level API
+         taglib_set_strings_unicode
+         taglib_set_string_management_enabled
+
+         taglib_file_new
+         taglib_file_new_type
+         taglib_file_free
+         taglib_file_is_valid
+         taglib_file_tag
+         taglib_file_audioproperties
+         taglib_file_save
+
+         taglib_tag_title
+         taglib_tag_artist
+         taglib_tag_album
+         taglib_tag_comment
+         taglib_tag_genre
+         taglib_tag_year
+         taglib_tag_track
+
+         taglib_tag_set_title
+         taglib_tag_set_artist
+         taglib_tag_set_album
+         taglib_tag_set_comment
+         taglib_tag_set_genre
+         taglib_tag_set_year
+         taglib_tag_set_track
+
+         taglib_tag_free_strings
+
+         taglib_audioproperties_length
+         taglib_audioproperties_bitrate
+         taglib_audioproperties_samplerate
+         taglib_audioproperties_channels
+
+         _TagLib_ID3v2_Encoding
+
+         taglib_id3v2_set_default_text_encoding)
+
 ;; Racket representation of tags and audio
 (struct tag (title artist album comment genre year track)
   #:transparent)
@@ -23,53 +71,7 @@
   (struct/c audio-properties
             number? number? number? number?))
 
-(provide/contract
-  ;; get tag and audio props for the given file
-  [get-tags
-    (->/c path-string?
-          (option/c (list/c tag/c audio-properties/c)))])
-
-(provide (struct-out tag)
-         (struct-out audio-properties)
-
-         taglib_set_strings_unicode
-         taglib_set_string_management_enabled
-         
-         taglib_file_new
-         taglib_file_new_type
-         taglib_file_free
-         taglib_file_is_valid
-         taglib_file_tag
-         taglib_file_audioproperties
-         taglib_file_save
-         
-         taglib_tag_title
-         taglib_tag_artist
-         taglib_tag_album
-         taglib_tag_comment
-         taglib_tag_genre
-         taglib_tag_year
-         taglib_tag_track
-         
-         taglib_tag_set_title
-         taglib_tag_set_artist
-         taglib_tag_set_album
-         taglib_tag_set_comment
-         taglib_tag_set_genre
-         taglib_tag_set_year
-         taglib_tag_set_track
-         
-         taglib_tag_free_strings
-         
-         taglib_audioproperties_length
-         taglib_audioproperties_bitrate
-         taglib_audioproperties_samplerate
-         taglib_audioproperties_channels
-         
-         _TagLib_ID3v2_Encoding
-         
-         taglib_id3v2_set_default_text_encoding)
-
+;; FFI stuff
 (define taglib (ffi-lib "libtag_c"))
 (define-ffi-definer define-tl taglib)
 
@@ -83,7 +85,6 @@
 	   mp4 asf type)))
 
 ;; Racket API
-
 (define (get-tags path)
   (unless (path-string? path)
     (raise-type-error 'get-tags "path-string" path))
