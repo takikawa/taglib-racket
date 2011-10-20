@@ -1,4 +1,7 @@
-#lang scribble/doc
+#lang scribble/manual
+
+@(require (for-label racket/base))
+@(require (for-label "../taglib.rkt"))
 
 @title{Taglib Bindings for Racket}
 
@@ -8,6 +11,9 @@ the C library, which only supports the limited abstract API of Taglib.
 
 Requires the taglibc library in order to function.
 
-@defmodule[taglib]
+@defmodule[(planet asumu/taglib)]
 
-
+@defproc[(get-tags [path path-string?]) (or/c tag? #f)]{
+  Given a path, produces a tag struct containing the media tag data for the
+  file at that path.
+}
