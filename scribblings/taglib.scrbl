@@ -3,18 +3,24 @@
 @(require planet/scribble)
 @(require (for-label racket/base)
           (for-label unstable/contract)
+          (for-label (this-package-in taglib main))
           (for-label "../taglib.rkt"))
 
 @title{Taglib Bindings for Racket}
 @author[(author+email "Asumu Takikawa" "asumu@racket-lang.org")]
 
-This package contains a set of Racket bindings for the Taglib library for
-reading and writing metadata for popular audio formats. The bindings are for
-the C library, which only supports the limited abstract API of Taglib.
+This package contains a set of Racket bindings for the
+@hyperlink["http://developer.kde.org/~wheeler/taglib.html"]{Taglib} library for
+reading metadata for popular audio formats. The bindings are for the C library,
+which only supports the limited abstract API of Taglib.
 
-Requires the taglibc library in order to function.
+Requires the taglibc library.
 
-@defmodule[(planet asumu/taglib)]
+This package has been tested on Debian GNU/Linux. If
+you have taglibc installed and this FFI binding cannot find it, please
+e-mail me about your setup so that I can improve the library.
+
+@defmodule/this-package[main]
 
 @defstruct[tag ([title string?]
                 [artist string?]
