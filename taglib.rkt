@@ -12,7 +12,7 @@
 
          (contract-out
            ;; get tag and audio props for the given file
-           [get-tags
+           [get-metadata
              (->/c path-string?
                    (option/c (list/c tag/c audio-properties/c)))])
 
@@ -64,12 +64,16 @@
 
 (define tag/c
   (struct/c tag
-            string? string? string? string?
-            string? number? number?))
+            string? string? string? string? string?
+            exact-nonnegative-integer?
+            exact-nonnegative-integer?))
 
 (define audio-properties/c
   (struct/c audio-properties
-            number? number? number? number?))
+            exact-nonnegative-integer?
+            exact-nonnegative-integer?
+            exact-nonnegative-integer?
+            exact-nonnegative-integer?))
 
 ;; FFI stuff
 (define taglib (ffi-lib "libtag_c"))
@@ -85,9 +89,9 @@
 	   mp4 asf type)))
 
 ;; Racket API
-(define (get-tags path)
+(define (get-metadata path)
   (unless (path-string? path)
-    (raise-type-error 'get-tags "path-string" path))
+    (raise-type-error 'get-metadata "path-string" path))
   (define file (taglib_file_new path))
   (dynamic-wind
    void
