@@ -31,10 +31,10 @@ e-mail me about your setup so that I can improve the library.
 Represents the Tag class in taglib. Contains common metadata.
 }
 
-@defstruct[audioproperties ([length exact-nonnegative-integer?]
-                            [bitrate exact-nonnegative-integer?]
-                            [samplerate exact-nonnegative-integer?]
-                            [channels exact-nonnegative-integer?])]{
+@defstruct[audio-properties ([length exact-nonnegative-integer?]
+                             [bitrate exact-nonnegative-integer?]
+                             [samplerate exact-nonnegative-integer?]
+                             [channels exact-nonnegative-integer?])]{
 
 Represents the AudioProperties class in taglib. Contains audio properties.
 }
