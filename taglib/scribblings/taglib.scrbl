@@ -1,10 +1,8 @@
 #lang scribble/manual
 
-@(require planet/scribble)
 @(require (for-label racket/base)
           (for-label unstable/contract)
-          (for-label (this-package-in taglib main))
-          (for-label "../taglib.rkt"))
+          (for-label "../main.rkt"))
 
 @title{Taglib Bindings for Racket}
 @author[(author+email "Asumu Takikawa" "asumu@racket-lang.org")]
@@ -20,7 +18,7 @@ This package has been tested on Debian GNU/Linux. If
 you have taglibc installed and this FFI binding cannot find it, please
 e-mail me about your setup so that I can improve the library.
 
-@defmodule/this-package[main]
+@defmodule[taglib]
 
 @defstruct[tag ([title string?]
                 [artist string?]
