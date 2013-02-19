@@ -4,7 +4,6 @@
 
 (require ffi/unsafe
 	 ffi/unsafe/define
-         (only-in unstable/contract option/c)
          (rename-in racket/contract [-> ->/c]))
 
 (provide (struct-out tag)
@@ -54,6 +53,11 @@
          _TagLib_ID3v2_Encoding
 
          taglib_id3v2_set_default_text_encoding)
+
+;; define this here instead of using the one in unstable
+;; since its location is different in git HEAD and the
+;; release versions
+(define (option/c ctc) (or/c ctc #f))
 
 ;; Racket representation of tags and audio
 (struct tag (title artist album comment genre year track)
