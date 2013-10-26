@@ -80,7 +80,7 @@
             exact-nonnegative-integer?))
 
 ;; FFI stuff
-(define taglib (ffi-lib "libtag_c"))
+(define taglib (ffi-lib "libtag_c" '("0")))
 (define-ffi-definer define-tl taglib)
 
 (define _TagLib_File (_cpointer/null 'TagLib_File))
