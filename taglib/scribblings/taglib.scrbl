@@ -8,7 +8,7 @@
 @author[(author+email "Asumu Takikawa" "asumu@racket-lang.org")]
 
 This package contains a set of Racket bindings for the
-@hyperlink["http://developer.kde.org/~wheeler/taglib.html"]{Taglib} library for
+@hyperlink["http://taglib.github.io/"]{Taglib} library for
 reading metadata for popular audio formats. The bindings are for the C library,
 which only supports the limited abstract API of Taglib.
 
