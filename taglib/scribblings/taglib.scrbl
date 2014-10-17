@@ -1,7 +1,8 @@
 #lang scribble/manual
 
-@(require (for-label racket/base)
-          (for-label "../main.rkt"))
+@(require (for-label racket/base
+                     racket/contract
+                     taglib))
 
 @title{Taglib Bindings for Racket}
 @author[(author+email "Asumu Takikawa" "asumu@racket-lang.org")]
@@ -39,7 +40,7 @@ Represents the AudioProperties class in taglib. Contains audio properties.
 }
 
 @defproc[(get-metadata [path path-string?])
-         (or/c (list/c tag/c audio-properties/c) #f)]{
+         (or/c (list/c tag? audio-properties?) #f)]{
   Extracts the metadata and audio properties of the audio file at the given
   path. If unsuccessful, the function returns @racket[#f].
 }
