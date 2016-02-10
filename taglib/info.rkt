@@ -8,6 +8,6 @@
 (define release-notes
   '("1 0: Initial release"))
 (define scribblings
-  '(("scribblings/taglib.scrbl")))
+  '(("scribblings/taglib.scrbl" () ("Audio"))))
 (define categories '(media))
 (define can-be-loaded-with '(all))
