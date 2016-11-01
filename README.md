@@ -1,6 +1,8 @@
 Taglib Bindings for Racket
 ==========================
 
+[![Scribble](https://img.shields.io/badge/Docs-Scribble-blue.svg)](http://docs.racket-lang.org/taglib/index.html)
+
 This package contains a set of Racket bindings for the
 [Taglib](http://developer.kde.org/~wheeler/taglib.html) library for
 reading metadata for popular audio formats. The bindings are for the C
@@ -53,7 +55,7 @@ given path. If unsuccessful, the function returns `#f`.
 
 ---
 
-Copyright 2013-2016 Asumu Takikawa
+Copyright © 2013-2016 Asumu Takikawa
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free
